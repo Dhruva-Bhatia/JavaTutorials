@@ -1,4 +1,4 @@
-package com.group.repo;
+package com.groups.repo;
 
 import java.io.File;
 import java.io.FileInputStream;
