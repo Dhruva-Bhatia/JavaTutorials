@@ -4,6 +4,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.contacts.service.ContactsService;
+import com.groups.service.GroupService;
 
 public class MainRun {
 	public static void main(String[] args) {
@@ -11,12 +12,12 @@ public class MainRun {
 		Scanner sc = new Scanner(System.in);
 		int mainOperation; // Group or Contact
 		ContactsService contactSrv = new ContactsService();
-		
+		GroupService groupSrv = new GroupService(contactSrv);		
 		
 		// loop till exit
 		while(true) {
 			try {
-				System.out.println("Enter the Operation (0 Exit, 1 Groups, 2 Contacts)");
+				System.out.println("\n\nEnter the Operation (0 Exit, 1 Groups, 2 Contacts)");
 				mainOperation = sc.nextInt();
 			} catch(InputMismatchException e) {
 				System.out.println("Please enter an integer");
@@ -29,7 +30,7 @@ public class MainRun {
 			}
 			switch(mainOperation) {
 			case 1:
-				// TODO add functionality to Group functions
+				groupSrv.execute(sc);
 				break;
 			case 2:
 				contactSrv.execute(sc);
@@ -40,6 +41,7 @@ public class MainRun {
 		}
 		// TODO save all data
 		contactSrv.saveData();
+		groupSrv.saveData();
 		System.exit(1);
 	}
 }

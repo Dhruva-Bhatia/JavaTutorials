@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.contacts.classes.Contact;
 
@@ -17,7 +18,7 @@ public class ContactsRepo {
 	/*
 	 * Function to write to contacts file
 	 */
-	public int writeArray(ArrayList<Contact> array){
+	public int writeArray(HashMap<Long, Contact> array){
 		File writeFile = new File(CONTACTS_FILE);
 		try {
 			writeFile.createNewFile();
@@ -46,10 +47,10 @@ public class ContactsRepo {
 	/*
 	 * Function to read from file
 	 */
-	public ArrayList<Contact> readFile(){
+	public HashMap<Long, Contact> readFile(){
 		try(ObjectInputStream readObj = new ObjectInputStream(new FileInputStream(CONTACTS_FILE))){
 			@SuppressWarnings("unchecked")
-			ArrayList<Contact> obj = (ArrayList<Contact>) readObj.readObject();
+			HashMap<Long, Contact> obj = (HashMap<Long, Contact>) readObj.readObject();
 			return obj;
 		} catch (FileNotFoundException e) {
 			return null;

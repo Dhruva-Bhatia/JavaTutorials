@@ -1,6 +1,9 @@
 package com.contacts.control;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 import com.contacts.classes.Contact;
@@ -12,10 +15,21 @@ public class ContactControl {
 	static String check_email_pattern = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$";
 
 	// create an array of the Contacts
-	ArrayList<Contact> contacts = new ArrayList<Contact>();
+	private HashMap<Long, Contact> contacts = new HashMap<Long, Contact>();
 	
 	// populate the contacts from file
 	ContactsRepo repoSrv = new ContactsRepo();
+	
+	// fetch contact by number
+	public Contact getContact(long number) {
+		// TODO implement this
+		if(contacts.containsKey(number)) {
+			return contacts.get(number);
+		}else {
+			return null;
+		}
+		
+	}
 	
 	/*
 	 * Add a contact
@@ -32,7 +46,7 @@ public class ContactControl {
 		String l_name = sc.nextLine();
 		
 		System.out.println("Enter the number: ");
-		long number = sc.nextLong();
+		Long number = Long.valueOf(sc.nextLong());
 		if(Math.log10(number) + 1 < 10) {
 			System.out.println("Number too short");
 			return;
@@ -46,26 +60,30 @@ public class ContactControl {
 			return;
 		}
 		
-		contacts.add(new Contact(number, f_name, l_name, email));
+		contacts.put(number ,new Contact(number, f_name, l_name, email));
 	}
 	
 	/*
 	 * Delete contact by name
 	 */
 	private void delete(String name) {
-		int index = 0;
-		boolean found = false;
-		for(Contact contact:contacts) {
-			if(contact.f_name == name) {
-				found = true;
+		Long number = 0l;
+		
+		// iterate through the values to find the name
+		Iterator<Entry<Long, Contact>> iterator = contacts.entrySet().iterator();
+		while(iterator.hasNext()) {
+			Entry<Long, Contact> entry = iterator.next();
+			if(entry.getValue().fullName == name) {
+				number = entry.getKey();
 				break;
 			}
-			index++;
 		}
-		if(found) {
-		contacts.remove(index);
+		
+		if(number == 0l) {
+			System.out.println("No name called "+name+" is found in contacts");
 		}else {
-			System.out.println("Contact not found");
+			this.contacts.remove(number);
+			System.out.println("Contact deleted");
 		}
 	}
 	
@@ -73,19 +91,11 @@ public class ContactControl {
 	 * Delete contact by number
 	 */
 	private void delete(long phone) {
-		int index = 0;
-		boolean found = false;
-		for(Contact contact:contacts) {
-			if(contact.number == phone) {
-				found = true;
-				break;
-			}
-			index++;
-		}
-		if(found) {
-		contacts.remove(index);
-		}else {
+		if(!this.contacts.containsKey(phone)) {
 			System.out.println("Contact not found");
+		}else {
+			contacts.remove(Long.valueOf(phone));
+			System.out.println("Contact deleted");
 		}
 	}
 	
@@ -100,9 +110,12 @@ public class ContactControl {
 			long deleteNumber = sc.nextLong();   // TODO add try catch block
 			delete(deleteNumber);
 		}else {
-			System.out.println("Enter the name");
+			System.out.println("Enter the first name");
 			sc.nextLine();
 			String deleteName = sc.nextLine();
+			System.out.println("Enter the last name");
+			deleteName += " " + sc.nextLine();
+			
 			delete(deleteName);
 		}
 	}
@@ -112,14 +125,10 @@ public class ContactControl {
 	 */
 	public void fetchData() {
 		// Fetch the data from the contacts file
-		ArrayList<Contact> curr_contacts = repoSrv.readFile();
+		HashMap<Long, Contact> curr_contacts = repoSrv.readFile();
 		// Append to contacts
-		if(curr_contacts == null) {
-			
-		}else {
-			for(Contact curr_contact:curr_contacts) {
-				contacts.add(curr_contact);
-			}
+		if(curr_contacts != null) {
+			this.contacts = curr_contacts;
 		}
 	}
 	
@@ -127,9 +136,14 @@ public class ContactControl {
 	 * Lists the contacts
 	 */
 	public void listContacts() {
-		for(Contact contact:contacts) {
-			System.out.println(contact);
+		int index = 1;
+		
+		Iterator<Entry<Long, Contact>> iterator = contacts.entrySet().iterator();
+		while(iterator.hasNext()) {
+			System.out.println(index+".");
+			System.out.println(iterator.next().getValue());
 			System.out.println("\n");
+			index++;
 		}
 	}
 	

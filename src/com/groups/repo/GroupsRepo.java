@@ -13,7 +13,7 @@ import com.contacts.classes.Contact;
 import com.groups.classes.Group;
 
 public class GroupsRepo {
-final String GROUPS_FILE = "contacts.txt";
+final String GROUPS_FILE = "groups.txt";
 	
 	/*
 	 * Function to write to contacts file
@@ -47,10 +47,10 @@ final String GROUPS_FILE = "contacts.txt";
 	/*
 	 * Function to read from file
 	 */
-	public ArrayList<Contact> readFile(){
+	public ArrayList<Group> readFile(){
 		try(ObjectInputStream readObj = new ObjectInputStream(new FileInputStream(GROUPS_FILE))){
 			@SuppressWarnings("unchecked")
-			ArrayList<Contact> obj = (ArrayList<Contact>) readObj.readObject();
+			ArrayList<Group> obj = (ArrayList<Group>) readObj.readObject();
 			return obj;
 		} catch (FileNotFoundException e) {
 			return null;

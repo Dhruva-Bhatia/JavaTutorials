@@ -7,13 +7,13 @@ import com.contacts.control.ContactControl;
 
 public class ContactsService {
 	// inititate the control
-	ContactControl controlSrv;
+	public ContactControl controlSrv;
 	int operation;
 	
 	public ContactsService() {
 		// intiate the control
-		controlSrv = new ContactControl();
-		controlSrv.fetchData();
+		this.controlSrv = new ContactControl();
+		this.controlSrv.fetchData();
 	}
 	
 	// get the input

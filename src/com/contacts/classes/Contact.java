@@ -28,7 +28,16 @@ public class Contact implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "Contacts [f_name=" + f_name + ", l_name=" + l_name + ", email=" + email + ", number=" + number + "]";
+		return "f_name=" + f_name + ", l_name=" + l_name + ", email=" + email + ", number=" + number;
 	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = prime + Long.valueOf(this.number).hashCode();
+		
+		return result;
+	}
+	
 
 }
